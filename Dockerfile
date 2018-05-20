@@ -6,7 +6,7 @@ MAINTAINER Paul Choi <paulchoi@alum.berkeley.edu>
 WORKDIR /minecraft
 
 # Accept Mojang EULA
-RUN echo "eula=TRUE" > eula.txt
+RUN echo "eula=true" > eula.txt
 
 # Silence harmless but scary sounding errors
 RUN echo "[]" > banned-ips.json
@@ -18,16 +18,16 @@ RUN echo "[]" > whitelist.json
 # Add server settings
 ADD server.properties /minecraft/
 
-# Downloaded from http://tcpr.ca/craftbukkit
-ADD craftbukkit-1.8.3-R0.1-SNAPSHOT-latest.jar /minecraft/
+ADD https://yivesmirror.com/files/craftbukkit/craftbukkit-latest.jar /minecraft/
 
 # Downloaded from https://github.com/zhuowei/RaspberryJuice
-ADD RaspberryJuice/jars/raspberryjuice-1.7.jar /minecraft/plugins/
+ADD https://github.com/zhuowei/RaspberryJuice/raw/master/jars/raspberryjuice-1.11.jar /minecraft/plugins/
+
+# Add start script
+ADD start.sh /
 
 # Port 4711 is for mcpi
 EXPOSE 4711
 EXPOSE 25565
 
-CMD java -Xmx1024M -Xms1024M \
-    -jar /minecraft/`find /minecraft/ -name "craftbukkit*.jar" \
-        | xargs basename`
+ENTRYPOINT ["/start.sh"]
